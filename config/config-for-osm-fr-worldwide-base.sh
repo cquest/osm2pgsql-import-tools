@@ -23,16 +23,16 @@ work_dir=/run/shm/osm2pgsql-import
 expire_dir=/data/work/osm2pgsql/expire_list/
 
 #0 doesn't print anything out, 1 prints every commands that we run + output of commands
-verbosity=1
+verbosity=0
 
 #record timeings of osm2pgsql, osmosis and tile generation processing
 with_timeings=1
 
 #For osm2pgsql options (database name is not hardcoded here because some scripts needs it as a variable, so we just make use of it here)
 #--tag-transform-script $project_dir/script.lua (pensez à faire des chemin absolu ou utilisez $project_dir sinon, ça foire quand c'est pas lancé du dossier en cours)
-common_osm2pgsql_options=" -k -m -G -s -S $project_dir/osm2pgsql-choosen.style -d $base_osm --keep-coastlines --flat-nodes /ssd-nvme/osm2pgsql/flat-nodes.raw"
-diff_osm2pgsql_options="--number-processes=12 -a -C 1024 $common_osm2pgsql_options"
-import_osm2pgsql_options="--create -C 18000 --number-processes=12 $common_osm2pgsql_options "
+common_osm2pgsql_options=" -k -m -G -s -S $project_dir/osm2pgsql-choosen.style -d $base_osm --keep-coastlines --flat-nodes /rpool/flatnodes"
+diff_osm2pgsql_options="--number-processes=4 -a -C 1024 $common_osm2pgsql_options"
+import_osm2pgsql_options="--create -C 18000 --number-processes=16 $common_osm2pgsql_options "
 
 #post import sql scripts in requetes-sql-indexes-et-autre to run, separated by spaces
 operations_post_import="index-planet_osm_ways-a-reindexer.sql indexes-admin_level.sql indexes-ref.sql index-ref-sandre.sql"

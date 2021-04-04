@@ -36,7 +36,7 @@ osm2pgsql_lock_pid_file=$work_dir/osm2pgsql.pid
 osmosis_lock_pid_file=$work_dir/osmosis.pid
 
 #create work_dir
-mkdir $work_dir 2>/dev/null
+mkdir -p $work_dir 2>/dev/null
 
 function time_spent {
 if [ $with_timeings == 0 ] ; then
@@ -124,14 +124,14 @@ if [ ! -z "$expire_dir" ]; then
   time_spent start
   d=$(date --utc +%FT%TZ)
   mv $osm2pgsql_expire_tile_list $osm2pgsql_expire_tile_list-$d
-  mkdir $expire_dir
+  mkdir -p $expire_dir
   gzip $osm2pgsql_expire_tile_list-$d && mv $osm2pgsql_expire_tile_list-$d.gz $expire_dir
   time_spent stop tile_exp_gzip
 fi
 
 #looks like everything was well
 if [ $osm2pgsql_exit_code == 0 ] ; then
-  rm $temporary_diff_file
+  mv $temporary_diff_file $temporary_diff_file.old
   rm $project_dir/state.txt.old
 else
   echo "osm2pgsql failed at importing diffs, more information if you enable verbosity." 1>&2
